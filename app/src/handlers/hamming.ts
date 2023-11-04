@@ -1,23 +1,14 @@
 export function hammingEncode(input: string): string {
-  if (input.length !== 4) {
-    throw new Error('Input length must be 4');
+  let encoded = '';
+  for (let i = 0; i < input.length; i += 4) {
+    const chunk = input.slice(i, i + 4).padEnd(4, '0');
+    encoded += encodeChunk(chunk);
   }
+  return encoded;
+}
 
-  const p1 = (
-    parseInt(input[0]) ^
-    parseInt(input[1]) ^
-    parseInt(input[3])
-  ).toString();
-  const p2 = (
-    parseInt(input[0]) ^
-    parseInt(input[2]) ^
-    parseInt(input[3])
-  ).toString();
-  const p3 = (
-    parseInt(input[1]) ^
-    parseInt(input[2]) ^
-    parseInt(input[3])
-  ).toString();
-
-  return p1 + p2 + input[0] + p3 + input.slice(1);
+function encodeChunk(input: string): string {
+  const d = input.split('').map((bit) => parseInt(bit));
+  const p = [d[1] ^ d[2] ^ d[3], d[0] ^ d[2] ^ d[3], d[0] ^ d[1] ^ d[3]];
+  return `${p[0]}${p[1]}${d[0]}${p[2]}${d[1]}${d[2]}${d[3]}`;
 }

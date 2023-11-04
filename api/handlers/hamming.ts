@@ -1,32 +1,19 @@
 export function hammingDecode(encoded: string): string {
-  if (encoded.length !== 7) {
-    throw new Error("Encoded length must be 7");
+  let decoded = "";
+  for (let i = 0; i < encoded.length; i += 7) {
+    const chunk = encoded.slice(i, i + 7).padEnd(7, "0");
+    decoded += decodeChunk(chunk);
   }
+  return decoded;
+}
 
-  const p1 = (
-    parseInt(encoded[2]) ^
-    parseInt(encoded[4]) ^
-    parseInt(encoded[6])
-  ).toString();
-  const p2 = (
-    parseInt(encoded[2]) ^
-    parseInt(encoded[5]) ^
-    parseInt(encoded[6])
-  ).toString();
-  const p3 = (
-    parseInt(encoded[4]) ^
-    parseInt(encoded[5]) ^
-    parseInt(encoded[6])
-  ).toString();
-
-  const errorBit = parseInt(p1 + p2 + p3, 2);
-
-  if (errorBit !== 0) {
-    encoded =
-      encoded.slice(0, errorBit - 1) +
-      (1 - parseInt(encoded[errorBit - 1])).toString() +
-      encoded.slice(errorBit);
+function decodeChunk(encoded: string): string {
+  const bits = encoded.split("").map((bit) => parseInt(bit));
+  const p = [bits[0], bits[1], bits[3]];
+  const d = [bits[2], bits[4], bits[5], bits[6]];
+  const errorBit = p[0] ^ d[1] ^ d[2] ^ d[3];
+  if (errorBit) {
+    d[0] ^= 1;
   }
-
-  return encoded[2] + encoded.slice(4);
+  return d.join("");
 }

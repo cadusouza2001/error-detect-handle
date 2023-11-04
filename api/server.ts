@@ -2,6 +2,7 @@ import * as WebSocket from "ws";
 import { huffmanDecompression } from "./decoder/huffman";
 import { crcDecode } from "./handlers/crc";
 import { repetitionDecode } from "./handlers/repetition";
+import { hammingDecode } from "./handlers/hamming";
 import { bitsToString } from "./utils/bitsToString";
 
 const wss = new WebSocket.Server({ port: 8080 });
@@ -17,6 +18,8 @@ wss.on("connection", (ws: WebSocket) => {
         decodedText = crcDecode(messageString.slice(4));
       } else if (messageString.startsWith("REP:")) {
         decodedText = repetitionDecode(messageString.slice(4), 3);
+      } else if (messageString.startsWith("HAM:")) {
+        decodedText = hammingDecode(messageString.slice(4));
       } else {
         return;
       }

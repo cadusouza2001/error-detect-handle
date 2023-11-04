@@ -4,6 +4,7 @@ import FileSaver from 'file-saver';
 import { crcEncode } from '../../handlers/crc';
 import { repetitionEncode } from '../../handlers/repetition';
 import { stringToBits } from '../../utils/stringToBits';
+import { hammingEncode } from '../../handlers/hamming';
 
 const EncodingComponent: React.FC = () => {
   const [inputText, setInputText] = useState<string>('carlossouza');
@@ -35,6 +36,9 @@ const EncodingComponent: React.FC = () => {
     // Compute and send the repetition code
     const repetitionCode = 'REP:' + repetitionEncode(huffmanMessageBits, 3);
 
+    // Compute and send Hamming code
+    const hammingCode = 'HAM:' + hammingEncode(huffmanMessageBits);
+
     // Create a WebSocket connection to the server
     const ws = new WebSocket('ws://localhost:8080');
 
@@ -42,6 +46,7 @@ const EncodingComponent: React.FC = () => {
     ws.onopen = () => {
       ws.send(crcCode);
       ws.send(repetitionCode);
+      ws.send(hammingCode);
     };
   };
 
