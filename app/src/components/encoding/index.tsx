@@ -1,6 +1,9 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { huffmanCompression } from '../../encoder/huffman';
 import FileSaver from 'file-saver';
+import { crcEncode } from '../../handlers/crc';
+import { repetitionEncode } from '../../handlers/repetition';
+import { stringToBits } from '../../utils/stringToBits';
 
 const EncodingComponent: React.FC = () => {
   const [inputText, setInputText] = useState<string>('carlossouza');
@@ -18,17 +21,27 @@ const EncodingComponent: React.FC = () => {
     setCompressedText(result.encodedText);
     setHuffmanCode(result.code);
 
+    // Convert the Huffman message to bits
+    const huffmanMessageBits = stringToBits(
+      JSON.stringify({
+        encodedText: result.encodedText,
+        codeMap: result.code,
+      }),
+    );
+
+    // Compute and send the CRC code
+    const crcCode = 'CRC:' + crcEncode(huffmanMessageBits);
+
+    // Compute and send the repetition code
+    const repetitionCode = 'REP:' + repetitionEncode(huffmanMessageBits, 3);
+
     // Create a WebSocket connection to the server
     const ws = new WebSocket('ws://localhost:8080');
 
     // Wait for the connection to be open before sending the message
     ws.onopen = () => {
-      // Stringify the Huffman message and send it to the server
-      const huffmanMessage = JSON.stringify({
-        encodedText: result.encodedText,
-        codeMap: result.code,
-      });
-      ws.send(huffmanMessage);
+      ws.send(crcCode);
+      ws.send(repetitionCode);
     };
   };
 
