@@ -1,0 +1,81 @@
+/* Set background color and font family */
+body {
+  background-color: #f5f5f5;
+  font-family: Arial, sans-serif;
+}
+
+/* Style the main container */
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 500px;
+  height: 200px;
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.file-input {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.confirm-button {
+  font-size: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.compressed-text-container {
+  margin-bottom: 20px;
+}
+
+.huffman-codes-container {
+  margin-bottom: 20px;
+}
+
+.download-button {
+  font-size: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
