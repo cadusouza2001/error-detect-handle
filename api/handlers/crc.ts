@@ -1,6 +1,18 @@
 export function crcDecode(encoded: string, polynomial = "10011"): string {
   let remainder = mod2div(encoded, polynomial);
   if (parseInt(remainder, 2) !== 0) {
+    for (let i = 0; i < encoded.length; i++) {
+      // Flip the i-th bit
+      let corrected =
+        encoded.slice(0, i) +
+        (1 - parseInt(encoded[i])).toString() +
+        encoded.slice(i + 1);
+      // Check if the corrected code passes the CRC check
+      if (parseInt(mod2div(corrected, polynomial), 2) === 0) {
+        console.log("CRC: Error on bit " + i);
+        return corrected.slice(0, -polynomial.length + 1);
+      }
+    }
     throw new Error("CRC check failed");
   }
   return encoded.slice(0, -polynomial.length + 1);

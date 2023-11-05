@@ -9,6 +9,14 @@ export function hammingEncode(input: string): string {
 
 function encodeChunk(input: string): string {
   const d = input.split('').map((bit) => parseInt(bit));
-  const p = [d[1] ^ d[2] ^ d[3], d[0] ^ d[2] ^ d[3], d[0] ^ d[1] ^ d[3]];
-  return `${p[0]}${p[1]}${d[0]}${p[2]}${d[1]}${d[2]}${d[3]}`;
+  //Position 0 ensures that the whole code has an even number of 1s
+  //Position 1 is parity bit where final bit is 1
+  //Position 2 is parity bit where second to last bit is 1
+  //Position 4 is parity bit where third to last bit is 1
+  const position_one = d[0] ^ d[1] ^ d[3];
+  const position_two = d[0] ^ d[2] ^ d[3];
+  const position_four = d[1] ^ d[2] ^ d[3];
+  const position_zero =
+    d[0] ^ d[1] ^ d[2] ^ d[3] ^ position_one ^ position_two ^ position_four;
+  return `${position_zero}${position_one}${position_two}${d[0]}${position_four}${d[1]}${d[2]}${d[3]}`;
 }

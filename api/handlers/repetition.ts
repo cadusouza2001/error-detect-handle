@@ -7,6 +7,17 @@ export function repetitionDecode(encoded: string, n = 3): string {
         count++;
       }
     }
+    // Correct the error
+    if (count !== n && count !== 0) {
+      console.log(
+        "REP: Error on chunk " +
+          encoded.slice(i, i + n) +
+          " on position " +
+          i +
+          " to " +
+          (i + n)
+      );
+    }
     decoded += count > n / 2 ? "1" : "0";
   }
   return decoded;
