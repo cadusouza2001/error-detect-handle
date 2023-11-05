@@ -16,10 +16,13 @@ wss.on("connection", (ws: WebSocket) => {
       // Check if the message is a CRC code
       if (messageString.startsWith("CRC:")) {
         decodedText = crcDecode(messageString.slice(4));
+        console.log("CRC: ", decodedText);
       } else if (messageString.startsWith("REP:")) {
         decodedText = repetitionDecode(messageString.slice(4), 3);
+        console.log("REP: ", decodedText);
       } else if (messageString.startsWith("HAM:")) {
         decodedText = hammingDecode(messageString.slice(4));
+        console.log("HAM: ", decodedText);
       } else {
         return;
       }
